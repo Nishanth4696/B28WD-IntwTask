@@ -1,38 +1,166 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
+  height: 100vh;
+  
+  
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.ingredients{
+  display: flex;
+    margin: 30px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    align-content: stretch;
+}
+.div-container{
+  display: flex;
+}
+.back{
+  position: sticky !important;
+}
+.welcome{
+font-size: 32px;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.userList{
+  background-color: rgba(0, 0, 255, 0.699);
+  height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.user-name{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.profile-pic{
+  border-radius: 150px;
+  height: 100px;
+  width: 100px;
+}
+.user-container{
+  background-color: white;
+  min-width: 320px;
+  width: 350px;
+  border: 1px solid black;
+  border-radius: 20px;
+  overflow: hidden;
+  height: min-content;
+  margin: 20px;
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.81);
+-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.81);
+-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.81);
+}
+.add-user-form{
+  display:grid;
+  grid-template-columns: repeat(2, 2fr);
+  
+ 
+}
+.datepicker{
+ justify-content: center !important;
+ 
+}
+.editButton{
+  display: flex;
+}
+.button{
+  height: 50px;
+  width: 100px;
+}
+
+
+.user-poster{
+  height: 300px;
+  width: 350px;
+  object-fit: cover;
+}
+
+.user-specs{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-rating{
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.user-name{
+  font-size: 24px;
+  margin: 5px;
+  max-width: 80%;
+}
+
+.user-summary{
+  margin-top: 0px;
+  margin: 10px;
+}
+
+
+
+.userList{
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.counter-container{
+  display: inline-flex;
+  gap: 15px;
+  margin: 10px;
+  padding: 20px;
+  padding-left: 0%;
+  margin-left: 0%;
+
+}
+
+.likes-dislikes:hover{
+  background-color: brown;
+}
+
+.user-container:hover{
+  transition: all 0.5s;
+  transform: scale(1.05);
+}
+
+.user-show-button{
+font-size: 15px;
+}
+
+.add-user{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 75%;
+  margin-left: 40px;
+  margin-top: 20px;
+  
+  
 }
-
-.App-link {
-  color: #61dafb;
+.add-color{
+  height: 30px;
+  width: 300px;
+  
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.add-color-container{
+  margin: 20px;
+  
+}
+.like-dislike{
+  margin: 0;
+}
+.NotFound{
+  height: 560px;
+  width: 1200px;
+}
+nav{
+ font-size: 28px;
+ display: flex;
+ gap: 25px;
+ margin: 20px;
+ 
 }
