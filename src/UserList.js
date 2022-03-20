@@ -3,14 +3,32 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit'
 import { useHistory } from 'react-router-dom';
+import { useState,useEffect } from 'react';
+import { API_URL } from './global-constants.js';
 
 
-export default function UserList({Users, setUsers}){
+export default function UserList(){
+  const [Users, setUsers] = useState([]);
+
+  const getUsers = () =>{
+    fetch(`${API_URL}/user`,{method:"GET"})
+    .then((data) => data.json())
+    .then((mvs) => setUsers(mvs))
+  }
+  useEffect(getUsers,[])
+
   const history = useHistory();
+
+  const deleteUser = (id) =>{
+    fetch(`${API_URL}/user/${id}`,{ method:"DELETE" })
+    .then(() => getUsers());
+    
+  }
     return(
       <section className="userList">
-         {Users.map(({Fullname, Profilepic,Mobileno, Emailid, JobType,DOB, PrefLoc}, index) => 
+         {Users.map(({Fullname, Profilepic,Mobileno, Emailid, JobType,DOB, PrefLoc, id}) => 
           <User 
+            
             Fullname={Fullname} 
             Profilepic={Profilepic} 
             Mobileno={Mobileno} 
@@ -18,24 +36,19 @@ export default function UserList({Users, setUsers}){
             JobType={JobType}           
             DOB={DOB}
             PrefLoc={PrefLoc}
-            id={index}
+            id={id}
             deleteButton={
               <IconButton 
-                onClick={() =>{
-                  const deleteIdx = index;
-                  const remainingUsers = Users.filter((mv, idx) => idx !== deleteIdx) 
-                  console.log("remaining", remainingUsers)
-                  setUsers(remainingUsers)
-                }} 
-                  className="user-show-button"
-                  aria-label="delete" 
-                  color="error">
-                    <DeleteIcon />
-                </IconButton>
+              onClick={() =>deleteUser(id)}
+                className="user-show-button"
+                aria-label="delete" 
+                color="error">
+                  <DeleteIcon />
+              </IconButton>
             }
             editButton={
               <IconButton 
-                onClick={() =>{ history.push("/user/edit/" + index)
+                onClick={() =>{ history.push("/user/edit/" + id)
                  
                 }} 
                 style={{ marginLeft:"auto" }}

@@ -15,15 +15,16 @@ export default function User({Fullname, Profilepic,Mobileno, Emailid, JobType,DO
 
 
 const summarystyles = { display :show ? 'block' : 'none'} 
+
+
     return (
       
       <Card className="user-container">
         
           
-        <img 
-          src={Profilepic} 
-          alt={Fullname} 
-          className="user-poster"/>
+        <div className='user-poster'>
+          <img src={Profilepic} alt=''  className='img' />
+        </div>
         <div className="user-specs">
               <h3 className="user-name">{Fullname}
 

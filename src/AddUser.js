@@ -1,50 +1,96 @@
-import { useState } from 'react';
+
+
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { useHistory } from 'react-router-dom';
 import { CustomizedTables } from './Table'; 
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import Stack from '@mui/material/Stack';
+import { useFormik } from "formik";
+import * as yup from 'yup';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
+import { API_URL } from './global-constants';
 
-export function AddUser({ Users,   setUsers }) {
-  const [Fullname, setFullname] = useState("");
-  const [Profilepic, setProfilepic] = useState("");
-  const [Mobileno, setMobileno] = useState("");
-  const [Emailid, setEmailid] = useState("");
-  const [JobType, setJobType] = useState("");
-  const [DOB, setDOB] = useState(null);
-  const [PrefLoc, setPrefLoc] = useState("");
- 
+const formValidationSchema= yup.object({
+  Fullname:yup
+      .string()
+      .required(),
+  Mobileno:yup
+      .number()
+      .required("why not fill this field🎃"),
+  Emailid:yup
+      .string()
+      .email()
+      .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,"please enter valid email")
+      .required("why not fill tis field🎃"),
+  JobType:yup
+      .string()
+      .required("why not fill tis field🎃"),
+  DOB:yup
+      .date()
+      .required("why not fill tis field🎃"),
+  PrefLoc:yup
+      .string()
+      .required("why not fill tis field🎃")
+})
+
+export function AddUser() {
+
+  const formik = useFormik({
+    initialValues: {
+      Fullname:'', 
+      Profilepic:'',
+      Mobileno:'',
+      Emailid:'',
+      JobType:'',
+      DOB:'',
+      PrefLoc:''
+    },
+    // validate: validateForm,
+    validationSchema: formValidationSchema,
+    onSubmit: (newUser) => {
+    
+
+      console.log("onSumbit", newUser)
+      addUser(newUser);
+    }
+  });
+
    
 
+
   const history = useHistory();
-
-
-
-  const addUser = () => {
+  
+  const addUser = (newUser) => {
 
     console.log("adding");
-    const newUser = {
-      Fullname,
-      Profilepic,
-      Mobileno,
-      Emailid,
-      JobType,
-      DOB,
-      PrefLoc,
-      
-    };
+    
     console.log(newUser);
-    setUsers([...Users, newUser]);
-    history.push("/register")
-
+    
+      fetch(`${API_URL}/user`,
+      {
+                
+        method:"POST",
+        body:JSON.stringify(newUser),
+        headers:{'Content-Type':'application/json'},
+      })
+      .then(() => history.push("/user"))
   };
-console.log(PrefLoc)
 
-  const rows = [...Users];
+const Jobtype=[
+  {
+    value: 'Part Time',
+    label: 'PT',
+  },
+  {
+    value: 'Full Time',
+    label: 'FT',
+  },
+  {
+    value: 'Consultant',
+    label: 'Consultant',
+  },
+]
+
   const Preflocs = [
     {
       value: 'Chennai',
@@ -63,6 +109,26 @@ console.log(PrefLoc)
       label: 'Pune',
     },
   ];
+  const [User, setUser] = useState([]);
+
+  const getUsers = () =>{
+    fetch(`${API_URL}/user`,{method:"GET"})
+    .then((data) => data.json())
+    .then((mvs) => setUser(mvs))
+  }
+  useEffect(getUsers,[])
+  const rows = [...User];
+
+  const deleteUser = (id) =>{
+    fetch(`${API_URL}/user/${id}`,{ method:"DELETE" })
+    .then(() => getUsers());
+    
+  }
+
+ 
+  
+ 
+ 
  
   return (
     <section>
@@ -70,102 +136,127 @@ console.log(PrefLoc)
        
      
     <div >
-    <fieldset style={{width:'900px', height:'400px'}}>
+    <fieldset style={{width:'1200px', height:'min-content'}}>
         <legend><h3>Registration</h3></legend>
-        <div className='add-user-form'>
+        <form  onSubmit={formik.handleSubmit} className='add-user-form'>
 
         
           <TextField
-              value={Fullname}
-              onChange={(event) => setFullname(event.target.value)}
-              label='Enter the Fullname'
-              id="standard-basic"
-              variant="outlined" 
-              style={{margin:'10px'}}/>
+             id="outlined-error-helper-text"
+             name="Fullname"
+             value={formik.values.Fullname}
+             onChange={formik.handleChange}
+             onBlur={formik.handleBlur}
+             label='Enter the Fullname'
+             style={{margin:'10px'}}
+             variant="outlined" 
+             error={formik.errors.Fullname && formik.touched.Fullname}
+             helperText={formik.errors.Fullname && formik.touched.Fullname && formik.errors.Fullname}/>
+
+          <TextField
+             id="Profilepic"
+             name="Profilepic"
+             style={{margin:'10px'}}
+             value={formik.values.Profilepic}
+             onChange={formik.handleChange}
+             onBlur={formik.handleBlur}
+             label='Enter the Profilepic'
+             variant="outlined" 
+             error={formik.errors.Profilepic && formik.touched.Profilepic}
+             helperText={formik.errors.Profilepic && formik.touched.Profilepic && formik.errors.Profilepic}/>
+
        
-    
-
-
-       
-      
-      <TextField
-        className='add-receipe-input'
-        value={Profilepic}
-        onChange={(event) => setProfilepic(event.target.value)}
-        label='Enter the Profilepic'
-        id="standard-basic"
-        variant="outlined" 
-        style={{margin:'10px'}}/>
-
-      <TextField
-        value={Mobileno}
-        onChange={(event) => setMobileno(event.target.value)}
-        label='Enter the Mobileno'
-        id="standard-basic"
-        variant="outlined" 
-        style={{margin:'10px'}}/>
-
-      <TextField
-        value={Emailid}
-        onChange={(event) => setEmailid(event.target.value)}
-        label='Enter the Emailid'
-        id="standard-basic"
-        variant="outlined" 
-        style={{margin:'10px'}}/>
-
-      <TextField
-        value={JobType}
-        onChange={(event) => setJobType(event.target.value)}
-        label='Enter the JobType'
-        id="standard-basic"
-        variant="outlined" 
-        style={{margin:'10px'}}/>
-         
-
-
-<LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Stack spacing={3} style={{justifyContent:'center' ,width:'430px', marginLeft:'10px'}}>
-          <DesktopDatePicker
-              label="DOB"
-             className='datepicker'
-              inputFormat="dd/mm/yyyy"
-              value={DOB}
-              onChange={(newValue) => setDOB(newValue)}
-              renderInput={(params) => <TextField {...params} />}
-              
-            />
-             </Stack>
-    </LocalizationProvider>
-
-    
-    <TextField
-          id="outlined-select"
-          select
-          label="Enter the PrefLoc"
-          value={PrefLoc}
-          onChange={(event) => {setPrefLoc(event.target.value)}}
-          style={{justifyContent:'center' ,width:'430px', marginLeft:'10px', margin:"10px"}}>
           
-          {Preflocs.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
+
+           <TextField
+             id="Mobileno"
+             name="Mobileno"
+             inputProps={{ maxLength: 15 }}
+             style={{margin:'10px'}}
+             value={formik.values.Mobileno}
+             onChange={formik.handleChange}
+             onBlur={formik.handleBlur}
+             label='Enter the Mobileno'
+             variant="outlined" 
+            
+             error={formik.errors.Mobileno && formik.touched.Mobileno}
+             helperText={formik.errors.Mobileno && formik.touched.Mobileno && formik.errors.Mobileno}/> 
+      
+    
+       <TextField
+             id="Emailid"
+             name="Emailid"
+             style={{margin:'10px'}}
+             value={formik.values.Emailid}
+             onChange={formik.handleChange}
+             onBlur={formik.handleBlur}
+             label='Enter the Emailid'
+             variant="outlined" 
+             error={formik.errors.Emailid && formik.touched.Emailid}
+             helperText={formik.errors.Emailid && formik.touched.Emailid && formik.errors.Emailid}/>
+
+          <TextField
+             id="JobType"
+             name="JobType"
+             select
+             style={{margin:'10px'}}
+             value={formik.values.JobType}
+             onChange={formik.handleChange}
+             onBlur={formik.handleBlur}
+             label='Enter the JobType'
+             variant="outlined" 
+             error={formik.errors.JobType && formik.touched.JobType}
+             helperText={formik.errors.JobType && formik.touched.JobType && formik.errors.JobType}>
+               {Jobtype.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+             </TextField>
+
+      
+        <TextField
+             id="DOB"
+             type='date'
+             style={{margin:'10px'}}
+             value={formik.values.DOB}
+             onChange={formik.handleChange}
+             onBlur={formik.handleBlur}
+             focused label='Enter the DOB'
+             variant="outlined" 
+             error={formik.errors.DOB && formik.touched.DOB}
+             helperText={formik.errors.DOB && formik.touched.DOB && formik.errors.DOB}/>
 
 
-
-
-
-      <Button onClick={addUser} variant="outlined" style={{height:'50px', width:'100px', margin:"auto"}}>Add/Update</Button>
-      </div>
+          <TextField
+             id="PrefLoc"
+             name="PrefLoc"
+             select
+             style={{justifyContent:'center' ,width:'580px', marginLeft:'10px', margin:"10px"}}
+             value={formik.values.PrefLoc}
+             onChange={formik.handleChange}
+             onBlur={formik.handleBlur}
+              label='Enter the PrefLoc'
+             variant="outlined" 
+             error={formik.errors.PrefLoc && formik.touched.PrefLoc}
+             helperText={formik.errors.PrefLoc && formik.touched.PrefLoc && formik.errors.PrefLoc}>
+                
+                {Preflocs.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+               </TextField>
+   <Button type="submit" variant="outlined" style={{height:'50px', width:'100px', margin:"auto"}}>Add/Update</Button>
+      </form>
       </fieldset>
     </div>
     <div>
-       <CustomizedTables rows={rows} />
+       <CustomizedTables rows={rows} deleteUser={deleteUser}/>
         </div>
     
   </section>
 
   );
 }
+

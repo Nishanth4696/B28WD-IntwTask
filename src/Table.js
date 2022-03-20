@@ -40,7 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-export function CustomizedTables({rows, deleteTrans }) {
+export function CustomizedTables({rows, deleteUser }) {
 const history = useHistory();
   return (
     <TableContainer component={Paper}>
@@ -52,29 +52,29 @@ const history = useHistory();
             <StyledTableCell align='center' >Mobile</StyledTableCell>
             <StyledTableCell align='center' >DOB</StyledTableCell>
             <StyledTableCell align='center' >JobType</StyledTableCell>
+            <StyledTableCell align='center' >Location</StyledTableCell>
             <StyledTableCell align='center' ></StyledTableCell>
             
           </TableRow>
         </TableHead>
         <TableBody >
          {rows.map((row) =>(
-            <StyledTableRow key={row.Voucher_No}>
+            <StyledTableRow key={row.DOB}>
              
               <StyledTableCell align='center'>{row.Fullname}</StyledTableCell>
               <StyledTableCell align='center'>{row.Emailid}</StyledTableCell>
               <StyledTableCell align='center'>{row.Mobileno}</StyledTableCell>
               <StyledTableCell align='center'>{row.DOB}</StyledTableCell>
               <StyledTableCell align='center'>{row.JobType}</StyledTableCell>
+              <StyledTableCell align='center'>{row.PrefLoc}</StyledTableCell>
               <StyledTableCell align='center'>
-              <IconButton color="primary" aria-label="upload picture" component="span" onClick={()=>history.push("/user/edit/" + row.id)}>
-                  <PersonIcon />
-                </IconButton>
+              
                 <IconButton color="primary" aria-label="upload picture" component="span" onClick={()=>history.push("/user/edit/" + row.id)}>
                   <EditIcon />
                 </IconButton>
 
              
-                <IconButton color="error" aria-label="upload picture" component="span" onClick={() =>deleteTrans(row.id)}>
+                <IconButton color="error" aria-label="upload picture" component="span" onClick={() =>deleteUser(row.id)}>
                   <DeleteIcon />
                 </IconButton></StyledTableCell>
               
